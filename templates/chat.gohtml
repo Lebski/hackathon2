@@ -1,0 +1,129 @@
+{{define "chat"}}
+<html>
+<head>
+    <title>Chat</title>
+
+    <!-- Lebski - TODO: Please mimize custom CSS afterwards -->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+    <link rel="stylesheet" href="/static/style.css">
+    <!-- Lebski - TODO: Please change location afterwards for faster loading  -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+
+</head>
+<body>
+
+<div class="container">
+
+    <div id="messages"></div>
+
+    <div class="row">
+        <form class="col s10">
+            <div class="row">
+                <div class="input-field col s12">
+                    <textarea id="textarea1" class="materialize-textarea"></textarea>
+                    <label for="textarea1">Schreibe etwas...</label>
+                </div>
+            </div>
+        </form>
+
+        <a id="send" class="waves-effect waves-light btn col"><i class="material-icons right">send</i>Senden!</a>
+
+    </div>
+
+
+</div>
+
+<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+<script>
+
+    var user = {{.userId}};
+
+    var userMail = "{{.userMail}}";
+    var oppenentMail = "{{.oppenentMail}}";
+
+    {{if .messages}}
+    console.log({{.messages}});
+    var messages = {{.messages}};
+    messages.forEach(function (msg) {
+        addMessages(msg);
+    });
+    {{end}}
+    $(function () {
+
+
+        var socket = null;
+        var msgBox = $("#textarea1");
+
+
+        $("#send").on('click', function () {
+            if (!msgBox.val()) return false;
+            if (!socket) {
+                alert("Error: There is no socket connection.");
+                return false;
+            }
+
+            socket.send(msgBox.val());
+            msgBox.val("");
+            return false;
+
+        });
+
+        if (!window["WebSocket"]) {
+            alert("Error: Your browser does not support web sockets.")
+        } else {
+            socket = new WebSocket("ws://{{.Host}}/users/{{.userId}}/room/{{.convId}}");
+            socket.onclose = function () {
+                alert("Connection has been closed. Redirecting to login.");
+                window.location.replace("/");
+            }
+            socket.onmessage = function (e) {
+                parsed = JSON.parse(e.data);
+                console.log(user);
+
+                addMessages(parsed)
+
+
+            }
+        }
+
+    });
+
+    function addMessages(msg) {
+            var messagesHTML = $("#messages");
+        var userMail = "{{.userMail}}";
+        var oppenentMail = "{{.oppenentMail}}";
+
+            var d = new Date(msg.Timestamp)
+            var dStr = "am " + d.getDate() + "." + (d.getMonth() + 1) + " um " + d.getHours() + ":" + d.getMinutes();
+
+
+
+        if (user == msg.SenderId) {
+            messagesHTML.append(`<div class="row">
+                    <div class="card-panel text-message col s11 m8 l7">
+                      <img src="http://identicon.org?t=asdfsadf` + msg.SenderId + `" alt="" class="circle">
+                <div class="text-message-content">
+                    <p><b>` + userMail + ` </b><i>` + dStr + `</i></p>
+                <p class="text-message-text">` + (msg.Text) + `</p>
+                </div>
+                </div>
+                </div>`);
+        } else {
+            messagesHTML.append(`<div class="row">
+                    <div class="card-panel text-message col offset-s1 offset-m4 offset-l5 s11 m8 l7">
+                   <img src="http://identicon.org?t=asdfsadf` + msg.SenderId + `" alt="" class="circle">
+                <div class="text-message-content">
+                    <p><b>` + oppenentMail + `</b><i> ` + dStr + ` </i></p>
+                <p class="text-message-text">` + (msg.Text) + `</p>
+                </div>
+                </div>
+                </div>`);
+        }
+
+    }
+
+</script>
+</body>
+</html>
+{{end}}

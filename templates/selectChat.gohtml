@@ -1,0 +1,60 @@
+{{define "selectChat"}}
+    <html>
+    <head>
+        <title>Select</title>
+
+        <!-- Lebski - TODO: Please mimize custom CSS afterwards -->
+        <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+        <link rel="stylesheet" href="/static/style.css">
+        <!-- Lebski - TODO: Please change location afterwards for faster loading  -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+
+    </head>
+    <body>
+
+
+    <div class="container">
+        <ul class="collection with-header">
+            <li class="collection-header"><h5>Your conversations:</h5></li>
+            {{$uid := .userId}}
+            {{range .conversations}}
+                <li class="collection-item">
+                    <div>Keep on chatting with {{.UserEmail}}<a href="/users/{{$uid}}/chat/{{.ConversationId}}" class="secondary-content"><i
+                                    class="material-icons">send</i></a></div>
+                </li>
+            {{end}}
+        </ul>
+
+        <!-- Lebski - TODO: Please do not show all your users in production -->
+
+        <ul class="collapsible">
+            <li>
+                <div class="collapsible-header"><i class="material-icons">add_circle</i>Start a new conversation</div>
+                <div class="collapsible-body" style="background-color: white">
+        <ul class="collection">
+            {{ range $key, $value := .users }}
+                <li class="collection-item">
+                    <div>Start a new Chat with {{$value.Email}}<a href="/users/{{$uid}}/conversation/{{$key}}" class="secondary-content"><i
+                                    class="material-icons">send</i></a></div>
+                </li>
+            {{end}}
+        </ul>
+                </div>
+            </li>
+        </ul>
+    </div>
+
+    <!-- Lebski - INFO: First import jquery THEN materialize -->
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+    <script>
+        $(document).ready(function(){
+            $('.collapsible').collapsible();
+        });
+    </script>
+
+
+    </body>
+    </html>
+{{end}}

@@ -1,0 +1,59 @@
+{{define "index"}}
+    <html>
+    <head>
+        <title>Start</title>
+
+        <!-- Lebski - TODO: Please mimize custom CSS afterwards -->
+        <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+        <link rel="stylesheet" href="/static/style.css">
+
+
+    </head>
+    <body>
+    <div class="container">
+        <div class="row">
+            <div class="col s12 m6">
+                <div class="card darken-1">
+                    <div class="card-content ">
+                        <span class="card-title">Login</span>
+                       Log in here:
+                        <div class="row">
+                            <div class="input-field col s12 m6">
+                                <input placeholder="test1@test.de" id="email" type="email" class="validate">
+                                <label for="first_name">Email-Address</label>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="card-action">
+                        <a href="#" id="login">Login</a>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="card-panel collection with-header col s12 l6">
+                <p><h5>Or select a test user</h5></p>
+                <a href="/users/test1@test.de/select" class="collection-item">Test-User 1</a>
+                <a href="/users/test2@test.de/select" class="collection-item">Test-User 2</a>
+                <a href="/users/test3@test.de/select" class="collection-item">Test-User 3</a>
+            </div>
+        </div>
+
+
+    </div>
+    <!-- Lebski - INFO: First import jquery THEN materialize -->
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+    <script>
+        $("#login").on('click', function () {
+            user = $("#email").val();
+            window.location.replace("/users/" + user + "/select");
+        });
+    </script>
+
+    </body>
+    </html>
+{{end}}

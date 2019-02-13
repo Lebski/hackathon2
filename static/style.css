@@ -1,0 +1,43 @@
+body {
+    background-color: azure;
+}
+
+.container {
+    padding-top: 5rem;
+}
+
+.text-message {
+    background-color: aliceblue;
+
+    min-height: 300px;
+    position: relative;
+
+    border-radius: 5px;
+    margin-top: 1rem;
+}
+
+.text-message > .text-message-content {
+    padding-left: 60px;
+    min-height: 50px;
+}
+
+.text-message > .text-message-content > .text-message-text {
+    margin-top: 0;
+}
+
+#messages > .row {
+    padding-bottom: 0;
+    margin-bottom: 0;
+}
+
+.text-message img {
+    object-fit: cover;
+    position: absolute;
+    width: 42px;
+    height: 42px;
+    margin-top: 1rem;
+    overflow: hidden;
+    left: 15px;
+    display: inline-block;
+    vertical-align: middle;
+}
